@@ -4,40 +4,6 @@
     <meta charset="UTF-8">
     <title>Weather Monitoring in RxJS</title>
     <style>
-        body {
-            font-family: sans-serif;
-            padding: 10px;
-        }
-        h2 {
-            font-weight: bold;
-            display: inline-block;
-        }
-        .refresh {
-            font-size: 80%;
-            margin-left: 10px;
-        }
-        .header {
-            background: #ECECEC;
-            padding: 5px;
-        }
-        .suggestions {
-            border: 2px solid #ECECEC;
-        }
-        li {
-            padding: 5px;
-        }
-        li img {
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-        }
-        li .username, li .close {
-            display: inline-block;
-            position: relative;
-            bottom: 15px;
-            left: 5px;
-        }
-
         #form {
             margin-bottom: 20px;
         }
@@ -59,13 +25,17 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="#" class="this">BUTTON</a><h2>Double click it</h2>
-        </div>
+<div id="app-container">
+    <div id="form">
+        <label>Zip Code:</label>
+        <input type="text" id="zipcode-input">
+        <button id="add-location">Add Location</button>
     </div>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/4.1.0/rx.all.compat.min.js"></script>
-<script src="index.js"></script>
+</div>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/4.1.0/rx.all.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.0.0-beta.12/Rx.min.js"></script>
+<script src="main.js"></script>
+
 </body>
 </html>
+

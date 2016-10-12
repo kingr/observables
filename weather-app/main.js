@@ -1,12 +1,11 @@
-// Grab HTML elements
+// dom elements
 const appContainer = document.getElementById('app-container');
 const zipcodeInput = document.getElementById('zipcode-input');
 const addLocationBtn = document.getElementById('add-location');
 
 const BtnClickStream =
     Rx.Observable
-        .fromEvent(addLocationBtn, 'click')
-        .mapTo(true);
+        .fromEvent(addLocationBtn, 'click');
 
 const zipInputStream =
     Rx.Observable
@@ -22,7 +21,7 @@ const zipcodeStream =
 
 // Create reusable temperature fetching stream
 const getTemperature = zip =>
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${zip},us&units=imperial&APPID=64a736555dcf29eb04bf4b0410c85ef0`)
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${zip},za&units=metric&APPID=64a736555dcf29eb04bf4b0410c85ef0`)
         .then(res => res.json());
 
 const zipTemperatureStreamFactory = zip =>
@@ -43,7 +42,7 @@ zipcodeStream
 
         const tempEle = document.createElement('p');
         tempEle.classList.add('temp');
-        tempEle.innerHTML = `${temp}&deg;F`;
+        tempEle.innerHTML = `${temp}&deg;C`;
 
         locationEle.appendChild(zipEle);
         locationEle.appendChild(tempEle);
