@@ -19,17 +19,16 @@ var checkZipCodeSize = function (val, i, arr) {
 const zipInputStream =
     Rx.Observable
         .fromEvent(zipcodeInput, 'input')
-        .map(e => e.target.value)
-        .filter(checkZipCodeSize);
+        .map(e => e.target.value);
+        // .filter(checkZipCodeSize);
 
 const zipcodeStream =
     BtnClickStream
         .withLatestFrom(zipInputStream, (click, zip) => zip)
-        .distinct()
+        .distinct();
 
-// Create reusable temperature fetching stream
 const getTemperature = zip =>
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${zip},za&units=metric&APPID=64a736555dcf29eb04bf4b0410c85ef0`)
+    fetch(`http://api.openweathermap.org/data/2.5/weather?id=${zip}&units=metric&APPID=64a736555dcf29eb04bf4b0410c85ef0`)
         .then(res => res.json());
 
 
@@ -37,17 +36,30 @@ const zipTemperatureStreamFactory = zip =>
     Rx.Observable
         .fromPromise(getTemperature(zip))
         .map((val) => {
-            var weatherObj = {main: val.main.temp, zip: parseInt(zip)};
+            console.log(val)
+            var weatherObj = {temp: val.main.temp, zip: parseInt(zip), city: val.name};
             return weatherObj;
         });
 
-zipTemperatureStreamFactory('7580');
-
 zipcodeStream
     .flatMap(zipTemperatureStreamFactory)
-    .forEach({zip, temp} => {
-        console.log(val)}
-    );
+    .forEach(({temp, zip, city}) => {
+            const weatherWidget = document.createElement('div');
+            weatherWidget.id = `zip-${zip}`;
+            weatherWidget.classList.add('location');
+
+            const zipEle = document.createElement('p');
+            zipEle.classList.add('zip');
+            zipEle.innerText = city;
+
+            const tempEle = document.createElement('p');
+                tempEle.classList.add('temp');
+                tempEle.innerHTML = `${temp}&deg;C`;
+
+            weatherWidget.appendChild(zipEle);
+            weatherWidget.appendChild(tempEle);
+            appContainer.appendChild(weatherWidget);
+    });
 
 // zipcodeStream
 //     .flatMap(zipTemperatureStreamFactory)
