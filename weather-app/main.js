@@ -9,36 +9,46 @@ const BtnClickStream =
         // create a stream to the matching DOM Element
         .fromEvent(addLocationBtn, 'click');
 
-        // iterate over the observable stream.
-        // .subscribe(val => console.log('observable',val));
-
-var fn = function (e) {
-    console.log(e.target.value);
+var checkZipCodeSize = function (val, i, arr) {
+    if (val.length === 4) {
+        return true;
+    }
 }
+
 
 const zipInputStream =
     Rx.Observable
         .fromEvent(zipcodeInput, 'input')
         .map(e => e.target.value)
-        .forEach( val => console.log("obs",val));
-        // .filter(zip => zip.length === 4);
-//
-//
-// const zipcodeStream =
-//     BtnClickStream
-//         .withLatestFrom(zipInputStream, (click, zip) => zip)
-//         .distinct()
-//
-// // Create reusable temperature fetching stream
-// const getTemperature = zip =>
-//     fetch(`http://api.openweathermap.org/data/2.5/weather?q=${zip},za&units=metric&APPID=64a736555dcf29eb04bf4b0410c85ef0`)
-//         .then(res => res.json());
-//
-// const zipTemperatureStreamFactory = zip =>
-//     Rx.Observable
-//         .fromPromise(getTemperature(zip))
-//         .map(({ main: { temp } }) => ({ temp, zip }));
-//
+        .filter(checkZipCodeSize);
+
+const zipcodeStream =
+    BtnClickStream
+        .withLatestFrom(zipInputStream, (click, zip) => zip)
+        .distinct()
+
+// Create reusable temperature fetching stream
+const getTemperature = zip =>
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${zip},za&units=metric&APPID=64a736555dcf29eb04bf4b0410c85ef0`)
+        .then(res => res.json());
+
+
+const zipTemperatureStreamFactory = zip =>
+    Rx.Observable
+        .fromPromise(getTemperature(zip))
+        .map((val) => {
+            var weatherObj = {main: val.main.temp, zip: parseInt(zip)};
+            return weatherObj;
+        });
+
+zipTemperatureStreamFactory('7580');
+
+zipcodeStream
+    .flatMap(zipTemperatureStreamFactory)
+    .forEach({zip, temp} => {
+        console.log(val)}
+    );
+
 // zipcodeStream
 //     .flatMap(zipTemperatureStreamFactory)
 //     .forEach(({ zip, temp }) => {
