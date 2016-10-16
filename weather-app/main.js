@@ -2,20 +2,26 @@
 const appContainer = document.getElementById('app-container');
 const zipcodeInput = document.getElementById('zipcode-input');
 const addLocationBtn = document.getElementById('add-location');
+const test = document.getElementById('test');
 
 const BtnClickStream =
     Rx.Observable
-        .fromEvent(addLocationBtn, 'click')
         // create a stream to the matching DOM Element
+        .fromEvent(addLocationBtn, 'click');
 
-        .subscribe(val => console.log(val));
         // iterate over the observable stream.
+        // .subscribe(val => console.log('observable',val));
 
-// const zipInputStream =
-//     Rx.Observable
-//         .fromEvent(zipcodeInput, 'input')
-//         .map(e => e.target.value)
-//         .filter(zip => zip.length === 4);
+var fn = function (e) {
+    console.log(e.target.value);
+}
+
+const zipInputStream =
+    Rx.Observable
+        .fromEvent(zipcodeInput, 'input')
+        .map(e => e.target.value)
+        .forEach( val => console.log("obs",val));
+        // .filter(zip => zip.length === 4);
 //
 //
 // const zipcodeStream =
